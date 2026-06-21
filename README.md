@@ -1,4 +1,4 @@
-# Projeto: CI com GitHub Actions (`ci-exec`)
+# Projeto: CI com GitHub Actions (`tests-ci`)
 
 ## 1) Instalação
 
@@ -32,13 +32,13 @@ ls -la reports/
 - `npm test` — roda Mocha com o repórter padrão (console).
 - `npm run test:ci` — roda Mocha com `mocha-junit-reporter` e grava `reports/test-results.xml`.
 
-## 4) Como funciona a pipeline (`.github/workflows/ci-exec.yaml`)
+## 4) Como funciona a pipeline (`.github/workflows/tests-ci.yaml`)
 
-O workflow principal está em `.github/workflows/ci-exec.yaml` e contempla três formas de execução:
+O workflow principal está em `.github/workflows/tests-ci.yaml` (nome: "CI - Testes") e contempla três gatilhos principais:
 
-- `push` na branch `main`: execução automática após push.
-- `workflow_dispatch`: execução manual pela interface do GitHub (Actions → Run workflow).
-- `schedule`: execução agendada via cron (ex.: `*/05 * * * *` roda a cada 5 minutos).
+- `push` na branch `main` — execução automática após push.
+- `workflow_dispatch` — execução manual pela interface do GitHub (Actions → Run workflow).
+- `schedule` — execução agendada via cron (o workflow atual usa `0 18 * * *`, executando diariamente às 18:00 UTC).
 
 Passos executados no job `mocha-tests`:
 
@@ -51,6 +51,6 @@ Passos executados no job `mocha-tests`:
 
 ## 5) Onde encontro o relatório no GitHub
 
-Após a execução do workflow (por push, manual ou agendada), abra a run em Actions → clique na execução → procure a seção "Artifacts". O artifact `mocha-test-results` contém `test-results.xml`.
+Após a execução do workflow (por push, manual ou agendada), abra a run em Actions → clique na execução → procure a seção "Artifacts". O artifact "Relatórios de Testes Mocha" contém a pasta `reports` (incluindo `test-results.xml`).
 
 
