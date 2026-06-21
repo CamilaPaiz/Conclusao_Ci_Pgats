@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
-  "dependencies": {
-    "mocha": "^11.7.6"
+  "scripts": {
+    "test": "mocha \"test/**/*.js\"",
+    "test:ci": "mkdir -p reports && mocha \"test/**/*.js\" --reporter mocha-junit-reporter --reporter-options mochaFile=./reports/test-results.xml && mocha \"test/**/*.js\" --reporter mochawesome --reporter-options reportDir=./reports,reportFilename=mochawesome-report,quiet=true"
+  },
+  "devDependencies": {
+    "mocha": "^11.7.6",
+    "mocha-junit-reporter": "^2.2.1",
+    "mochawesome": "^7.1.4"
   }
 }

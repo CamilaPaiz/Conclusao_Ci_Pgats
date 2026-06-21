@@ -15,7 +15,7 @@ export default class ServicoDePagamento {
   }
 
   consultarUltimoPagamento() {
-    return this.#pagamentos;
+    return this.#pagamentos.at(-1);
   }
 }
 

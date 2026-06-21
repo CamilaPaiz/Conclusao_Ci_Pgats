@@ -1,35 +1,56 @@
-# Desafio_2_PGATS
-Repositório  curso PGATS
+# Projeto: CI com GitHub Actions (`ci-exec`)
 
-# Exercício 1 - Serviço de Pagamento
+## 1) Instalação
 
-Este projeto implementa uma classe JavaScript que registra pagamentos e consulta o último pagamento realizado.
 
-## Funcionalidade
+### `npm ci` vs `npm install`
 
-- Armazena pagamentos em uma lista interna
-- Cada pagamento possui:
-  - `codigoBarras`
-  - `empresa`
-  - `valor`
-  - `categoria` (`cara` quando `valor > 100.0`, caso contrário `padrão`)
-- Método `pagar(codigoBarras, empresa, valor)` adiciona um pagamento
-- Método `consultarUltimoPagamento()` retorna apenas o último pagamento registrado
+- `npm ci`: instalação limpa e reprodutível baseada estritamente em `package-lock.json`. Falha se não houver `package-lock.json`. Ideal para CI/pipelines e para garantir instalações idênticas.
+- `npm install`: usado em desenvolvimento para instalar/atualizar dependências; pode alterar o `package-lock.json`.
 
-## Estrutura do projeto
+- Recomendações:
+	- Use `npm ci` no CI (o workflow já usa `npm ci`).
+	- Use `npm install` localmente quando for adicionar ou atualizar dependências.
 
-- `src/ServicoDePagamento.js` - classe do serviço de pagamento
-- `test/servicoDePagamento.test.js` - testes com Mocha e `node:assert`
-- `package.json` - configurações do npm e script de teste
+## 2) Como rodar (local)
 
-## Instalação
-npm install
+- Rodar testes com saída no terminal :
 
-## Executar testes
-npx mocha
+```bash
+npm test
+```
 
-## Observações
+- Gerar o relatório JUnit localmente (mesmo formato que o CI produz):
 
-- O projeto usa módulos ES (`type: "module"` no `package.json`).
-- Use `assert.equal` para comparar objetos nos testes.
+```bash
+npm run test:ci
+ls -la reports/
+```
+
+## 3) Scripts úteis
+
+- `npm test` — roda Mocha com o repórter padrão (console).
+- `npm run test:ci` — roda Mocha com `mocha-junit-reporter` e grava `reports/test-results.xml`.
+
+## 4) Como funciona a pipeline (`.github/workflows/ci-exec.yaml`)
+
+O workflow principal está em `.github/workflows/ci-exec.yaml` e contempla três formas de execução:
+
+- `push` na branch `main`: execução automática após push.
+- `workflow_dispatch`: execução manual pela interface do GitHub (Actions → Run workflow).
+- `schedule`: execução agendada via cron (ex.: `*/05 * * * *` roda a cada 5 minutos).
+
+Passos executados no job `mocha-tests`:
+
+1. Checkout do repositório via `actions/checkout`.
+2. Setup do Node.js via `actions/setup-node`.
+3. Instalação das dependências com `npm ci`.
+4. Criação da pasta `reports` (local onde o repórter grava o XML).
+5. Execução dos testes em modo CI: `npm run test:ci` — gera `reports/test-results.xml`.
+6. Upload do arquivo `reports/test-results.xml` como artifact usando `actions/upload-artifact`.
+
+## 5) Onde encontro o relatório no GitHub
+
+Após a execução do workflow (por push, manual ou agendada), abra a run em Actions → clique na execução → procure a seção "Artifacts". O artifact `mocha-test-results` contém `test-results.xml`.
+
 

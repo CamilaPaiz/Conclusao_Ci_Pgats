@@ -9,7 +9,7 @@ describe('Classe de Servico De Pagamento', function () {
     //Act
     servicoDePagamento.pagar('0987-8656-3475', 'Xis', 187.87);
     const pagamento = servicoDePagamento.consultarUltimoPagamento();
-    const meuUltimoPagamento = pagamento.at(-1);
+    const meuUltimoPagamento = pagamento;
 
     //Assert
     assert.equal(meuUltimoPagamento.codigoBarras, '0987-8656-3475');
@@ -25,7 +25,7 @@ describe('Classe de Servico De Pagamento', function () {
     //Act
     servicoDePagamento.pagar('1234-5678-9012', 'Empresa Y', 100.0);
     const pagamento = servicoDePagamento.consultarUltimoPagamento();
-    const meuUltimoPagamento = pagamento.at(-1);
+    const meuUltimoPagamento = pagamento;
     
     //Assert
     assert.equal(meuUltimoPagamento.codigoBarras, '1234-5678-9012');
@@ -41,7 +41,7 @@ describe('Classe de Servico De Pagamento', function () {
     //Act
     servicoDePagamento.pagar('1234-5678-9512', 'Empresa X', 50.0);
     const pagamento = servicoDePagamento.consultarUltimoPagamento();
-    const meuUltimoPagamento = pagamento.at(-1);
+    const meuUltimoPagamento = pagamento;
 
     //Assert
     assert.equal(meuUltimoPagamento.codigoBarras, '1234-5678-9512');
